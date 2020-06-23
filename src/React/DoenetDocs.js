@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import './docs.css';
 import componentDocs from '../../docs/complete-docs.json';
 import DoenetHeader from './DoenetHeader';
-
+import ToolLayout from './ToolLayout/ToolLayout.js';
+import ToolLayoutPanel from './ToolLayout/ToolLayoutPanel.js';
 
 
 class DoenetDocs extends Component {
@@ -13,6 +14,8 @@ class DoenetDocs extends Component {
       selectedComponent: null,
       searchField: ""
     };
+
+    this.onSelectComponent = this.onSelectComponent.bind(this);
   }
 
   onSelectComponent = (componentName) => {
@@ -32,21 +35,35 @@ class DoenetDocs extends Component {
         }
       }
       
-    })
+    });
+
     return(
       <React.Fragment>
-        <DoenetHeader toolName="Documentation" headingTitle={""} />
-       
-        <div className="docs-container">
-          <div className="side-panel">
-            <SearchBox onSearchChange={this.onSearchChange}/>
-            <Sidebar 
-              filteredComponents={filteredComponents}
-              onSelectComponent={this.onSelectComponent} 
-              selectedComponent={this.state.selectedComponent}/>
-          </div>
-          {this.state.selectedComponent && <DocsContent onSelectComponent={this.onSelectComponent} selectedComponent={this.state.selectedComponent}/>}
-        </div>
+       {/* <DoenetHeader toolName="Documentation" headingTitle={""} /> */}
+       <ToolLayout toolName="Docs" headingTitle="Docs Heading" rightPanelClose={false}>
+         <ToolLayoutPanel key="one" panelName="Dictionary Panel">
+           <div className="side-panel">
+             <SearchBox onSearchChange={this.onSearchChange}/>
+             <Sidebar 
+               filteredComponents={filteredComponents}
+               onSelectComponent={this.onSelectComponent} 
+               selectedComponent={this.state.selectedComponent}/>
+           </div>
+         </ToolLayoutPanel>
+
+         <ToolLayoutPanel key="two" panelName="Viewer Panel">
+           <div>
+           {this.state.selectedComponent}
+           {/* {"Hello Friends"} */}
+           {this.state.selectedComponent && 
+           <DocsContent onSelectComponent={this.onSelectComponent} selectedComponent={this.state.selectedComponent}/>}
+           </div>
+         </ToolLayoutPanel>
+         {this.state.selectedComponent && 
+         <DocsContent onSelectComponent={this.onSelectComponent} selectedComponent={this.state.selectedComponent}/>}
+       </ToolLayout>
+      
+      
       </React.Fragment>
     )
   }
